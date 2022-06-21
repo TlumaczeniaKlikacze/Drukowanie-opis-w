@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style="display:flex;flex-direction: column;width:500px;height:500px;margin:auto;">
+        <input type="text" name="" id="input_text" style="width:100%;height:50px;font-size:30px">
+        <div style="display:flex;flex-direction: row;justify-content: space-between;height:50px;width:100%;">
+            <button style="cursor:pointer" id="FindById">Znajdz po ID</button>
+            <button style="cursor:pointer" id="FindByEan">Znajdz po EAN</button>
+        </div>
+        <div id="Container" style="display:flex;flex-direction:row;justify-content:space-between;width:100%;height:50px;margin-top:30px;">
+
+        </div>
+        <div></div>
+    </div>
+  <script>
+function PrintElem(elem)
+{
+    var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+    mywindow.document.write('<html><head><title>' + ''  + '</title>');
+    mywindow.document.write('</head><body >');
+    mywindow.document.write('<h1>' + ''  + '</h1>');
+    mywindow.document.write(elem);
+    mywindow.document.write('</body></html>');
+
+    mywindow.document.close(); // necessary for IE >= 10
+    mywindow.focus(); // necessary for IE >= 10*/
+
+    mywindow.print();
+    mywindow.close();
+
+    return true;
+}
+      let tmpData = {}
+      document.getElementById('FindByEan').addEventListener('click',()=>{
+        tmpData={}
+        document.getElementById('Container').innerHTML = ''
+        document.getElementById('FindById').disabled = true
+        document.getElementById('FindByEan').disabled = true
+          const inputek = document.getElementById('input_text').value.trim()
+          console.log(inputek)
+          if(!inputek){
+            document.getElementById('FindById').disabled = false
+            document.getElementById('FindByEan').disabled = false
+            return 
+          }
+            
+            fetch('/getByEan', {
+                method: 'POST',
+                headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id:inputek})
+            })
+            .then((res)=>res.json())
+            .then((res)=>{
+                document.getElementById('FindById').disabled = false
+                document.getElementById('FindByEan').disabled = false
+                if('message' in res)
+                    window.alert(res.message)
+                if('data' in res){
+                    tmpData = res.data
+                    console.log(res.data)
+                    const keys = Object.keys(res.data)
+                    console.log(keys)
+                    let string = ``
+                    for(const x in keys){
+                        string+=`
+                        <button style="cursor:pointer;" id=${x}>${keys[x]}</button>
+                        `
+                    }
+                    document.getElementById('Container').innerHTML = string
+                    const to_event =[... document.getElementById('Container').children]
+                    console.log(to_event)
+                    for(const y in to_event){
+                        to_event[y].addEventListener('click',(e)=>{
+                            const keys_obj = Object.keys(tmpData)
+                            PrintElem(tmpData[keys_obj[e.target.id]])
+                              document.getElementById('input_text').value=''
+                        })
+                    }
+                }
+            })
+            .catch((er)=>{
+                console.log(er)
+            window.alert('Wystapił błąd podczas łączenia')
+            document.getElementById('FindById').disabled = false
+            document.getElementById('FindByEan').disabled = false
+            document.getElementById('input_text').value=''
+            })
+      })
+      document.getElementById('FindById').addEventListener('click',()=>{
+        tmpData={}
+        document.getElementById('Container').innerHTML = ''
+        document.getElementById('FindById').disabled = true
+        document.getElementById('FindByEan').disabled = true
+          const inputek = document.getElementById('input_text').value.trim()
+          console.log(inputek)
+          if(!inputek){
+            document.getElementById('FindById').disabled = false
+            document.getElementById('FindByEan').disabled = false
+            return 
+          }
+            
+            fetch('/getById', {
+                method: 'POST',
+                headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id:inputek})
+            })
+            .then((res)=>res.json())
+            .then((res)=>{
+                document.getElementById('FindById').disabled = false
+                document.getElementById('FindByEan').disabled = false
+                if('message' in res)
+                    window.alert(res.message)
+                if('data' in res){
+                    tmpData = res.data
+                    console.log(res.data)
+                    const keys = Object.keys(res.data)
+                    console.log(keys)
+                    let string = ``
+                    for(const x in keys){
+                        string+=`
+                        <button style="cursor:pointer;" id=${x}>${keys[x]}</button>
+                        `
+                    }
+                    document.getElementById('Container').innerHTML = string
+                    const to_event =[... document.getElementById('Container').children]
+                    console.log(to_event)
+                    for(const y in to_event){
+                        to_event[y].addEventListener('click',(e)=>{
+                            const keys_obj = Object.keys(tmpData)
+                            PrintElem(tmpData[keys_obj[e.target.id]])
+                              document.getElementById('input_text').value=''
+                        })
+                    }
+                }
+            })
+            .catch((er)=>{
+                console.log(er)
+            window.alert('Wystapił błąd podczas łączenia')
+            document.getElementById('FindById').disabled = false
+            document.getElementById('FindByEan').disabled = false
+            document.getElementById('input_text').value=''
+            })
+      })
+  </script>
+</body>
+</html>
