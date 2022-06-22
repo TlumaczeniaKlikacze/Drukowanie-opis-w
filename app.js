@@ -23,12 +23,17 @@ app.post('/getById',(req,res)=>{
 app.post('/getByEan',(req,res)=>{
     const id = req.body.id
     const find = list_of_object.find(e=>e[ean_display] == id)
+    const find2 =  list_of_object.find(e=>e[id_display] == id)
     if(find){
         const newOne = {...find}
-
         delete newOne[id_display]
         delete newOne[ean_display]
         return res.status(200).json({data:newOne})
+    }else if(find2){
+        const newOne2 = {...find2}
+        delete newOne2[id_display]
+        delete newOne2[ean_display]
+        return res.status(200).json({data:newOne2})
     }
     return res.status(400).json({message:'Opis dla takiego EANU nie istnieje'})
 })
