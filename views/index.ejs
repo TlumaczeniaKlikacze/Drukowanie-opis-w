@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="print.css">
+    <script src="print.js"></script>
 </head>
 <body>
     <div style="display:flex;flex-direction: column;width:500px;height:500px;margin:auto;">
@@ -91,9 +93,44 @@ function PrintElem(elem)
                     console.log(to_event)
                     for(const y in to_event){
                         to_event[y].addEventListener('click',(e)=>{
+                            to_event.innerHTML = ''
                             const keys_obj = Object.keys(tmpData)
                             const element_data = tmpData[keys_obj[e.target.id]].replace(/(\r\n|\n|\r)/gm, " ").replace(/\s\s+/g, ' ');
-                            PrintElem(element_data)
+
+                            fetch('/getBase64', {
+                                method: 'POST',
+                                headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({text:element_data})
+                            })
+                            .then((res)=>res.json())
+                            .then((res)=>{
+
+                                if(res.base == null)
+                                    window.alert('Błąd podczas drukowania etykiety!')
+                                if(res.base != null){
+                                    console.log(`data:application/pdf;base64,${res.base}`)
+                                    printJS({
+                                       printable: `${res.base}`,
+                                       type: 'pdf',
+                                       base64: true
+                                     });
+                                }
+                           
+
+                                document.getElementById('input_text').value=''
+                                document.getElementById('input_text').focus()
+                            })
+                            .catch((er)=>{
+                                console.log(er)
+                                window.alert('Wystapil błąd podczas drukowania etykiety!')
+                                document.getElementById('input_text').value=''
+                                document.getElementById('input_text').focus()
+                            })
+                            //PrintElem(element_data)
+                        
                             document.getElementById('input_text').value=''
                             document.getElementById('input_text').focus()
                             
