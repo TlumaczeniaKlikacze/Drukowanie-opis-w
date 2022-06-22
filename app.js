@@ -30,7 +30,7 @@ app.post('/getByEan',(req,res)=>{
         delete newOne[ean_display]
         return res.status(200).json({data:newOne})
     }
-    return res.status(400).json({message:'Opis dla takiego id nie istnieje'})
+    return res.status(400).json({message:'Opis dla takiego EANU nie istnieje'})
 })
 app.get('/',(req,res)=>{
     res.render('index.ejs')

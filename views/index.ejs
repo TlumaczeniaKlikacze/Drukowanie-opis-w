@@ -67,11 +67,10 @@ function PrintElem(elem)
                     window.alert(res.message)
                 if('data' in res){
                     tmpData = res.data
-                    console.log(res.data)
                     const keys = Object.keys(res.data)
-                    console.log(keys)
                     let string = ``
                     for(const x in keys){
+                        if(tmpData[keys[x]].trim().length != 0 )
                         string+=`
                         <button style="cursor:pointer;" id=${x}>${keys[x]}</button>
                         `
@@ -82,8 +81,9 @@ function PrintElem(elem)
                     for(const y in to_event){
                         to_event[y].addEventListener('click',(e)=>{
                             const keys_obj = Object.keys(tmpData)
-                            PrintElem(tmpData[keys_obj[e.target.id]])
-                              document.getElementById('input_text').value=''
+                            const element_data = tmpData[keys_obj[e.target.id]].replace(/(\r\n|\n|\r)/gm, " ").replace(/\s\s+/g, ' ');
+                            PrintElem(element_data)
+                            document.getElementById('input_text').value=''
                         })
                     }
                 }
@@ -130,6 +130,7 @@ function PrintElem(elem)
                     console.log(keys)
                     let string = ``
                     for(const x in keys){
+                        if(tmpData[keys[x]].trim().length != 0 )
                         string+=`
                         <button style="cursor:pointer;" id=${x}>${keys[x]}</button>
                         `
@@ -140,8 +141,9 @@ function PrintElem(elem)
                     for(const y in to_event){
                         to_event[y].addEventListener('click',(e)=>{
                             const keys_obj = Object.keys(tmpData)
-                            PrintElem(tmpData[keys_obj[e.target.id]])
-                              document.getElementById('input_text').value=''
+                            const element_data = tmpData[keys_obj[e.target.id]].replace(/(\r\n|\n|\r)/gm, " ").replace(/\s\s+/g, ' ');
+                            PrintElem(element_data)
+                            document.getElementById('input_text').value=''
                         })
                     }
                 }
