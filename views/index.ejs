@@ -16,6 +16,9 @@
         <div id="Container" style="display:flex;flex-direction:row;justify-content:space-between;width:100%;height:50px;margin-top:30px;">
 
         </div>
+        <div id="Description" style="display:flex;flex-direction:row;justify-content:space-between;width:100%;height:100px;margin-top:20px;">
+
+        </div>
         <div></div>
     </div>
   <script>
@@ -41,10 +44,10 @@ function PrintElem(elem)
       document.getElementById('FindByEan').addEventListener('click',()=>{
         tmpData={}
         document.getElementById('Container').innerHTML = ''
+        document.getElementById('Description').innerHTML = ''
         document.getElementById('FindById').disabled = true
         document.getElementById('FindByEan').disabled = true
           const inputek = document.getElementById('input_text').value.trim()
-          console.log(inputek)
           if(!inputek){
             document.getElementById('FindById').disabled = false
             document.getElementById('FindByEan').disabled = false
@@ -69,13 +72,18 @@ function PrintElem(elem)
                     tmpData = res.data
                     const keys = Object.keys(res.data)
                     let string = ``
+                    let   string_descriptions = ``
                     for(const x in keys){
-                        if(tmpData[keys[x]].trim().length != 0 )
-                        string+=`
-                        <button style="cursor:pointer;" id=${x}>${keys[x]}</button>
-                        `
+                        if(tmpData[keys[x]].trim().length != 0 ){
+                            string+=`
+                            <button style="cursor:pointer;" id=${x}>${keys[x]}</button>
+                            `
+                            string_descriptions+=`<div><h1>${keys[x]}</h1><p>${tmpData[keys[x]].replace(/(\r\n|\n|\r)/gm, " ").replace(/\s\s+/g, ' ')}</p></div>`
+                        }
+                      
                     }
                     document.getElementById('Container').innerHTML = string
+                    document.getElementById('Description').innerHTML = string_descriptions
                     const to_event =[... document.getElementById('Container').children]
                     console.log(to_event)
                     for(const y in to_event){
@@ -99,6 +107,7 @@ function PrintElem(elem)
       document.getElementById('FindById').addEventListener('click',()=>{
         tmpData={}
         document.getElementById('Container').innerHTML = ''
+        document.getElementById('Description').innerHTML=''
         document.getElementById('FindById').disabled = true
         document.getElementById('FindByEan').disabled = true
           const inputek = document.getElementById('input_text').value.trim()
@@ -129,13 +138,18 @@ function PrintElem(elem)
                     const keys = Object.keys(res.data)
                     console.log(keys)
                     let string = ``
+                    let string_descriptions = ``
                     for(const x in keys){
-                        if(tmpData[keys[x]].trim().length != 0 )
-                        string+=`
-                        <button style="cursor:pointer;" id=${x}>${keys[x]}</button>
-                        `
+                        if(tmpData[keys[x]].trim().length != 0 ){
+                            string+=`
+                            <button style="cursor:pointer;" id=${x}>${keys[x]}</button>
+                            `
+                            string_descriptions+=`<div><h1>${keys[x]}</h1><p>${tmpData[keys[x]].replace(/(\r\n|\n|\r)/gm, " ").replace(/\s\s+/g, ' ')}</p></div>`
+                        }
+                      
                     }
                     document.getElementById('Container').innerHTML = string
+                    document.getElementById('Description').innerHTML = string_descriptions
                     const to_event =[... document.getElementById('Container').children]
                     console.log(to_event)
                     for(const y in to_event){
