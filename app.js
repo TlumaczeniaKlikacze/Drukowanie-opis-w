@@ -1,7 +1,6 @@
 const FONT_SIZE = 5
-const WIDTH = 300
-const HEIGHT = 400
-
+const WIDTH = 155.905511811024
+const HEIGHT = 116.192125984252
 const express = require('express')
 const app = express()
 const csv = require('csvtojson')
@@ -38,16 +37,19 @@ app.post('/getBase64',async(req,res)=>{
             const doc = new PDFDocument({
                 size:[WIDTH,HEIGHT],
                 margins:{
-                    top:20,
+                    top:0,
                     bottom:0,
-                    left:20,
+                    left:0,
                     right:0
                 }
             });
             doc
             .fontSize(FONT_SIZE)
-            .font('./fonts/NotoSans-Light.ttf')
-            .text(text)
+            .font('./fonts/ARIAL.TTF')
+            .text(text,{
+                width:155.905511811024,
+                height: 116.192125984252
+            })
             doc.end()
             return await getStream.buffer(doc)
           }
